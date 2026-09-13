@@ -1,11 +1,11 @@
 # Vercel 에 올리지 않는다 — 실데이터·키·로컬 산출물 (공개 배포 보안)
-data/
-.env
-.env.*
-.next/
-out/
-node_modules/
-mcp/node_modules/
-mcp/dist/
-coverage/
-docs/*영상*
+# 경로는 루트 기준으로 고정한다 — `data/` 만 쓰면 app/data/ 까지 빠진다 (2026-09-13 배포 실패)
+/data/
+/.env
+/.env.*
+/.next/
+/out/
+/node_modules/
+/mcp/node_modules/
+/mcp/dist/
+/coverage/
