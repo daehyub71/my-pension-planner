@@ -1,0 +1,11 @@
+# Vercel 에 올리지 않는다 — 실데이터·키·로컬 산출물 (공개 배포 보안)
+data/
+.env
+.env.*
+.next/
+out/
+node_modules/
+mcp/node_modules/
+mcp/dist/
+coverage/
+docs/*영상*

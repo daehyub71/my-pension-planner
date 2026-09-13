@@ -26,3 +26,4 @@ coverage/
 
 # pdfjs 워커 사본 (postinstall 이 만든다)
 public/pdf.worker.min.mjs
+.vercel
