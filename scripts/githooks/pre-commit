@@ -1,0 +1,9 @@
+#!/bin/sh
+# 실데이터 커밋 차단 (SPEC N2). 합성 픽스처(tests/fixtures/)만 예외.
+bad=$(git diff --cached --name-only | grep -Ev '^tests/fixtures/' | grep -E '(^|/)(100lifeplan_|연금_)|\.(xlsx|xls|pdf)$|^data/private/')
+if [ -n "$bad" ]; then
+  echo "커밋 거부 — 실데이터로 보이는 파일이 스테이지에 있다:" >&2
+  echo "$bad" >&2
+  exit 1
+fi
+exit 0

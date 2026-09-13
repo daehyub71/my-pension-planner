@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/* ── 디자인 토큰 (DESIGN §3 합의안, 2026-09-09) ── */
+:root {
+  --paper: #faf9f6;
+  --surface: #ffffff;
+  --inset: #f1efe9;
+  --ink: #1b1a17;
+  --ink-2: #57534a;
+  --ink-3: #8a857a;
+  --rule: #e5e2da;
+  --navy: #1f4e8c;
+  --navy-deep: #163a6b;
+  --nps: #2a78d6;      /* 국민연금 */
+  --retire: #eb6834;   /* 퇴직연금 */
+  --private: #1baf7a;  /* 개인연금 */
+  --danger: #c73635;
+  --danger-bg: #f7e2e1;
+  --warn: #8a6100;
+  --warn-bg: #f5ead0;
+  --good: #0b6b45;
+  --good-bg: #e2f0e8;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-inset: var(--inset);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-nps: var(--nps);
+  --color-retire: var(--retire);
+  --color-private: var(--private);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-good: var(--good);
+  --color-good-bg: var(--good-bg);
+  --font-title: var(--font-hahmlet), serif;
+  --font-body: var(--font-plex-kr), "Malgun Gothic", sans-serif;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 숫자는 자릿수 정렬 */
+.num { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

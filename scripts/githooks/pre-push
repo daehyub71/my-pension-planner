@@ -1,0 +1,36 @@
+#!/bin/sh
+# 공개 저장소 보호 (2026-09-13).
+#  ① backup/* 브랜치는 실데이터가 든 옛 이력이다 — 절대 푸시하지 않는다.
+#  ② 푸시할 커밋의 트리에 실데이터 값(data/private/sensitive-values.json)이 있으면 거부한다. 값은 출력하지 않는다.
+root=$(git rev-parse --show-toplevel)
+values="$root/data/private/sensitive-values.json"
+while read local_ref local_sha remote_ref remote_sha; do
+  case "$local_ref" in
+    refs/heads/backup/*) echo "푸시 거부 — $local_ref 는 실데이터가 든 로컬 백업 이력이다" >&2; exit 1 ;;
+  esac
+  [ "$local_sha" = "0000000000000000000000000000000000000000" ] && continue
+  if [ -f "$values" ]; then
+    hit=$(python3 - "$values" "$local_sha" <<'PY'
+import json, subprocess, sys, re
+vals = json.load(open(sys.argv[1]))
+skip = {"국민연금", "노령연금", "노령연금(개시전, 현재가치 0%)"}
+def variants(v):
+    out = {v}
+    if re.fullmatch(r"\d{5,}", v): out.add(f"{int(v):,}")
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", v): out.add(v.replace("-", "/"))
+    if re.fullmatch(r"\d{4}-\d{2}", v): out.add(f"{v[:4]}년{v[5:]}월")
+    return out
+n = 0
+for v in vals:
+    # 네 자리 숫자는 합성 데이터와 우연히 겹친다 — 다섯 자리 이상·날짜·이름만 본다
+    if v in skip or (re.fullmatch(r"\d+", v) and len(v) < 5) or len(v) < 4: continue
+    for s in variants(v):
+        if subprocess.run(["git", "grep", "-q", "-F", s, sys.argv[2], "--", ".", ":!*.xlsx", ":!*.json"], capture_output=True).returncode == 0:
+            n += 1
+print(n)
+PY
+)
+    if [ "$hit" != "0" ]; then echo "푸시 거부 — 실데이터 값 $hit 건이 푸시할 트리에 있다 (data/private/sensitive-values.json 기준)" >&2; exit 1; fi
+  fi
+done
+exit 0

@@ -1,0 +1,28 @@
+# 실데이터 — 절대 커밋하지 않는다 (SPEC N2)
+data/private/
+*.xlsx
+*.xls
+*.pdf
+# 테스트·데모 픽스처는 합성 데이터이므로 예외
+!tests/fixtures/**
+
+# 자격증명
+.env
+.env.*
+!.env.example
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+npm-debug.log*
+
+# 도구
+.vercel/
+.DS_Store
+coverage/
+
+# pdfjs 워커 사본 (postinstall 이 만든다)
+public/pdf.worker.min.mjs

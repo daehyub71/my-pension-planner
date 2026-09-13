@@ -1,0 +1,23 @@
+{
+  "name": "my-pension-planner-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "계산기 MCP — 개인 데이터 없이 연금 엔진만 공개한다 (SPEC F20)",
+  "bin": {
+    "my-pension-planner-mcp": "dist/mcp/src/server.js"
+  },
+  "main": "dist/mcp/src/server.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/mcp/src/server.js",
+    "smoke": "node scripts/smoke.cjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.43",
+    "typescript": "5.9.3"
+  }
+}
