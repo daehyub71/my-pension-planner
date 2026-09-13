@@ -12,8 +12,8 @@
 | M3 화면 ① 데이터·대시보드 | `██████████` | 100% | 7/7 | ✅ 완료 2026-09-09 |
 | M4 화면 ② 시나리오·가처분·목표 | `██████████` | 100% | 8/8 | ✅ 완료 2026-09-13 |
 | M5 규칙 근거·법규·스냅샷·데모 | `██████████` | 100% | 7/7 | ✅ 완료 2026-09-13 |
-| M6 MCP·배포·README | `███████░░░` | 71% | 5/7 | 🔄 진행 중 |
-| **전체** | `█████████░` | **96%** | **51/53** | |
+| M6 MCP·배포·README | `██████████` | 100% | 7/7 | ✅ 완료 2026-09-13 |
+| **전체** | `██████████` | **100%** | **53/53** | ✅ |
 
 마일스톤 완료 조건(공통): `npm run lint && npm test && npm run build` 전부 통과 + 사용자 확인.
 
@@ -105,15 +105,19 @@
 
 진행 기록 (2026-09-13): `mcp/` 도구 simulate·rules — 계약 테스트 6개 · stdio 스모크 통과. **Claude Desktop 연결 확인** — 로그(`~/Library/Logs/Claude/mcp-server-my-pension-planner.log`)에 서버 시작·tools/list·tools/call 2회 성공, 오류 0. `npm run build` 뒤 네트워크 호출 검사 자동 실행(CI 연결은 저장소 생성 후).
 - [x] M6-4 배포 전 보안 점검 — security-review · 시크릿 · git 히스토리에 실데이터 없음 · CI 권한
-- [ ] M6-5 Vercel 공개 배포(P5) · 공개 URL에서 데모 동작
+- [x] M6-5 Vercel 공개 배포(P5) · 공개 URL에서 데모 동작
 - [x] M6-6 README.md · README_KO.md(상호 링크, 스크린샷)
 
 보안 점검 기록 (2026-09-13): 실데이터 값 제거(문서·테스트·주석·픽스처 → 합성 값, 실데이터 기대값은 `data/private/expected-real.json`) · 키·토큰 패턴 0 · 위험 코드 패턴(dangerouslySetInnerHTML·eval·innerHTML) 0 · npm audit 0(웹·MCP) · 네트워크 검사 통과 · 산출물 키 0 · CI 권한 `contents: read`, 시크릿 미사용 · 보안 헤더(CSP connect-src self+law.go.kr, frame-ancestors none, nosniff) · pre-push 훅(backup/* 거부 · 실데이터 값 검사) · 공개 저장소는 새 이력(커밋 1개), 옛 이력은 로컬 `backup/full-history-2026-09-13`. README 2종 + 데모 스크린샷 6장.
-- [ ] M6-7 워크스페이스 CLAUDE.md 프로젝트 표 갱신(상태·URL)
+- [x] M6-7 워크스페이스 CLAUDE.md 프로젝트 표 갱신(상태·URL)
+
+배포 기록 (2026-09-13): 깃허브 공개 저장소 `daehyub71/my-pension-planner`(새 이력) · CI(웹 lint·test·build+네트워크 검사, MCP build+smoke) 통과 · Vercel 깃허브 연동 프로덕션 **https://my-pension-planner.vercel.app** — 6화면 200 · 보안 헤더 5종 · 데모 모드 · 배포 자산에 키 0·실데이터 값 0(숫자 일치는 SVG 좌표·pdf.js 표의 우연).
 
 ---
 
 ## 트러블슈팅 기록
+
+- **2026-09-13 M6 · 배포 첫 시도에서 세 번 걸렸다.** ① `git switch --orphan`은 추적 파일을 작업 폴더에서 지운다 — 백업 브랜치에서 `git checkout <backup> -- .`로 되살려 커밋했다(인덱스 = 백업 트리 139개 확인). ② CI `npm ci`가 lock 불일치(`@emnapi/*`)로 실패 — 로컬 npm 11로 만든 lock을 러너의 npm 10이 받지 않았다 → `npx npm@10 install --package-lock-only`로 다시 만들어 두 버전 모두 `npm ci --dry-run` 통과. ③ Vercel 빌드 실패 — `.vercelignore`의 `data/`가 `app/data/`까지 빼서 데이터 화면이 사라졌다 → 루트 기준(`/data/`)으로 고정.
 
 - **2026-09-13 M6 · 공개 저장소 전에 실데이터가 문서·테스트에 들어 있었다.** 파일(xlsx·pdf)은 한 번도 커밋되지 않았지만, SPEC §3의 생년월·국민연금 월액·적립금·가입일, 실데이터 전용 테스트의 기대값, 합성 픽스처에 섞인 실제 가입일, 코드 주석의 생년월이 추적 파일에 있었다. → 실데이터 전용 테스트는 `data/private/expected-real.json`(git 제외)에서 기대값을 읽고, 일반 테스트·주석·문서는 합성 K씨 값으로 바꿨다. 과거 커밋에도 값이 남아 있어 **공개 저장소는 정리된 트리를 새 이력(커밋 1개)으로 올린다**(사용자 결정). 옛 이력은 로컬 백업 브랜치에만 둔다 — **절대 푸시하지 않는다**. 점검용 값 목록은 `data/private/sensitive-values.json`.
 

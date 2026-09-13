@@ -60,7 +60,7 @@ npm은 **이 디렉토리에서** — 워크스페이스 루트 오설치 사례
 ## 진행 상태
 
 **SPEC v1.0 · PLAN v1.0 · DESIGN v1.0 확정 (2026-09-09)** — 결정 D1~D4·P1~P5·P-8 전부 확정, 시안 6장 합의.
-**M0·M1·M3 완료 (2026-09-09) · M2 완료 (2026-09-13) · **M4·M5 완료 (2026-09-13)** · 46/53 (87%) · 다음은 M6.** 진도는 `docs/TASKS.md` 대시보드 참조.
+**M0·M1·M3 완료 (2026-09-09) · M2 완료 (2026-09-13) · **M0~M6 완료 · 배포됨 (2026-09-13)** · 53/53 (100%) — https://my-pension-planner.vercel.app · 깃허브 `daehyub71/my-pension-planner`(공개).** 진도는 `docs/TASKS.md` 대시보드 참조.
 
 ### 새 세션이 이어받을 때
 
@@ -76,7 +76,10 @@ npm은 **이 디렉토리에서** — 워크스페이스 루트 오설치 사례
 | **M5** | 규칙 근거 화면(검증 리포트·법규 라이브러리·법제처 검색 opt-in) · 재산분 지역보험료 · 데모 K씨 · 스냅샷 연도 비교 · 「이 화면 읽는 법」 · 추가 입력 불러오기/저장 |
 | **M2** | 세금·건보료 — `tax.ts`(인출 순서 · 저율 · 1,500만 전액 · 종합/분리 자동 판정 · 수령한도 · 국민연금 과세) · `health.ts`(피부양자 · 지역보험료, 전부 추정) · `grade.ts`(등급 전파) · 규칙 29개 · 대시보드 가처분 토글 활성 |
 
-**바로 다음 (M6 MCP·배포·README)** — `docs/TASKS.md` M6-1~M6-7. 배포 전 보안 점검 필수(워크스페이스 규칙).
+**공개 저장소 규칙 (2026-09-13)** — 저장소는 공개다. **실데이터 값(생년월·적립금·월액·가입일·금융회사)을 문서·테스트·주석에 쓰지 않는다.** 실데이터 전용 테스트는 `data/private/expected-real.json`에서 기대값을 읽는다.
+- **`backup/full-history-2026-09-13` 브랜치는 실데이터가 든 옛 이력이다 — 절대 푸시하지 않는다.** `scripts/githooks/pre-push`가 backup/* 와 실데이터 값(`data/private/sensitive-values.json`)을 막는다.
+- **배포**: main 푸시 → Vercel 깃허브 연동이 빌드(`vercel.json`: 정적 `out/`, 보안 헤더). `.vercelignore` 경로는 루트 기준으로 쓴다. CI는 `.github/workflows/ci.yml`.
+- **계산기 MCP**: `mcp/` — `npm run build && npm run smoke`. Claude Desktop에 등록돼 있다(`claude_desktop_config.json`, 백업 `.bak-20260913-210932`).
 - **네트워크 호출은 `src/lawSearch.ts`(법제처 검색, 사용자 키 opt-in)에만 둔다** (N1). 브라우저에 키가 없으면 **개발 서버에서만** `.env.local`의 `LAW_OC`를 쓴다(`next.config.ts`) — 배포 빌드에 키가 실리면 안 된다. 법제처 응답 링크에는 키가 들어 있으니 화면 링크로 쓰지 않는다. 법규 발췌를 다시 모으려면 `node scripts/collect_law.mjs` (키는 `.env.local`).
 - **데모 K씨**: 저장된 스냅샷이 없으면 `src/demo/demo-k.snapshot.json`을 쓴다. 픽스처를 바꾸면 `UPDATE_DEMO=1 npx vitest run tests/demo`로 다시 만든다.
 - **가정은 화면끼리 공유된다** (`mpp.assumptions.v1`, 조회기준일이 같을 때만). 시나리오 화면의 「기본」만은 늘 포털 가정이다.
